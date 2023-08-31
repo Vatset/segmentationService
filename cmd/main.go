@@ -16,6 +16,12 @@ import (
 	"os"
 )
 
+// @title Segmentation Service
+// @version 1.0
+// @description API Server for Segmentation Service
+
+// @host localhost:8080
+// @BasePath /
 func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 	if err := initConfig(); err != nil {

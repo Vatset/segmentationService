@@ -7,6 +7,21 @@ import (
 	"segmentationService/src/handler/response"
 )
 
+// @Summary Segment Creation
+// @Tags segment
+// @description Creation of segments
+// @description (Before creating a segment, it undergoes the slug validation)
+// @description -----------------------------------------------------------------
+// @description In addition to the segment name, the user can specify the number of percentages. What percentage of all users should a new segment be automatically added to
+// @ID create-segment
+// @Accept  json
+// @Produce  json
+// @Param input body segmentation_service.SegmentPattern true "segment"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} response.errorResponse
+// @Failure 500 {object} response.errorResponse
+// @Failure default {object} response.errorResponse
+// @Router /api/segment/create [post]
 func (h *Handler) createSegment(c *gin.Context) {
 	var segmentCreation segmentation_service.SegmentPattern
 	var segmentation segmentation_service.Segmentation
@@ -35,6 +50,19 @@ func (h *Handler) createSegment(c *gin.Context) {
 	})
 }
 
+// @Summary Segment Update
+// @Tags segment
+// @description Updates segment's name in the database
+// @description (Before name changing, new name undergoes the slug validation)
+// @ID update-segment
+// @Accept  json
+// @Produce  json
+// @Param input body segmentation_service.UpdateSegment true "last_name , new_name"
+// @Success 200 {object} response.StatusResponse
+// @Failure 400,404 {object} response.errorResponse
+// @Failure 500 {object} response.errorResponse
+// @Failure default {object} response.errorResponse
+// @Router /api/segment/update [put]
 func (h *Handler) updateSegment(c *gin.Context) {
 	var input segmentation_service.UpdateSegment
 
@@ -57,6 +85,18 @@ func (h *Handler) updateSegment(c *gin.Context) {
 	})
 }
 
+// @Summary Segment Deletion
+// @Tags segment
+// @Description Delete segment in the database
+// @ID delete-segment
+// @Accept  json
+// @Produce  json
+// @Param input body segmentation_service.SegmentPattern true "segment"
+// @Success 200 {object} response.StatusResponse
+// @Failure 400,404 {object} response.errorResponse
+// @Failure 500 {object} response.errorResponse
+// @Failure default {object} response.errorResponse
+// @Router /api/segment/delete [delete]
 func (h *Handler) deleteSegment(c *gin.Context) {
 	var segmentDeletion segmentation_service.SegmentPattern
 	var segmentationDeletion segmentation_service.Segmentation

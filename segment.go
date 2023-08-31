@@ -33,7 +33,7 @@ type ShowHistory struct {
 	UserId    int    `json:"user_id" db:"user_id"`
 	Segment   string `json:"segment" db:"segment"`
 	Status    string `json:"status" db:"status"`
-	Timestamp string `json:"timestamp" db:"date" binding:"-"`
+	Timestamp string `json:"timestamp" db:"date" binding:"required"`
 }
 
 func SlugValidation(segment string) error {

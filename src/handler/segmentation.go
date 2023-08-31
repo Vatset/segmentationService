@@ -7,6 +7,18 @@ import (
 	"segmentationService/src/handler/response"
 )
 
+// @Summary Segmentation
+// @Tags segmentation
+// @description Add&Delete user to/from segment
+// @ID segment-membership
+// @Accept  json
+// @Produce  json
+// @Param input body segmentation_service.Segmentation true "Segmentation"
+// @Success 200 {object} response.StatusResponse
+// @Failure 400,404 {object} response.errorResponse
+// @Failure 500 {object} response.errorResponse
+// @Failure default {object} response.errorResponse
+// @Router /api/segmentation/ [post]
 func (h *Handler) segmentMembership(c *gin.Context) {
 	var input segmentation_service.Segmentation
 

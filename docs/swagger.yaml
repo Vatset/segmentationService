@@ -1,0 +1,411 @@
+basePath: /
+definitions:
+  response.StatusResponse:
+    properties:
+      status:
+        type: string
+    type: object
+  response.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  segmentationService.SegmentPattern:
+    properties:
+      id:
+        type: integer
+      percent:
+        type: integer
+      segment:
+        type: string
+    required:
+    - segment
+    type: object
+  segmentationService.Segmentation:
+    properties:
+      adding_segments:
+        items:
+          type: string
+        type: array
+      deleting_segments:
+        items:
+          type: string
+        type: array
+      id:
+        type: integer
+      status:
+        type: string
+      time_limit:
+        $ref: '#/definitions/segmentationService.TimeToLive'
+      userId:
+        type: integer
+    required:
+    - userId
+    type: object
+  segmentationService.ShowHistory:
+    properties:
+      segment:
+        type: string
+      status:
+        type: string
+      timestamp:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - timestamp
+    type: object
+  segmentationService.TimeToLive:
+    properties:
+      unit:
+        type: string
+      value:
+        type: integer
+    type: object
+  segmentationService.UpdateSegment:
+    properties:
+      last_name:
+        type: string
+      new_name:
+        type: string
+    required:
+    - last_name
+    - new_name
+    type: object
+  segmentationService.User:
+    properties:
+      username:
+        type: string
+    required:
+    - username
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for Segmentation Service
+  title: Segmentation Service
+  version: "1.0"
+paths:
+  /api/segment/create:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Creation of segments
+        (Before creating a segment, it undergoes the slug validation)
+        -----------------------------------------------------------------
+        In addition to the segment name, the user can specify the number of percentages. What percentage of all users should a new segment be automatically added to
+      operationId: create-segment
+      parameters:
+      - description: segment
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/segmentationService.SegmentPattern'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+      summary: Segment Creation
+      tags:
+      - segment
+  /api/segment/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete segment in the database
+      operationId: delete-segment
+      parameters:
+      - description: segment
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/segmentationService.SegmentPattern'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+      summary: Segment Deletion
+      tags:
+      - segment
+  /api/segment/update:
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Updates segment's name in the database
+        (Before name changing, new name undergoes the slug validation)
+      operationId: update-segment
+      parameters:
+      - description: last_name , new_name
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/segmentationService.UpdateSegment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+      summary: Segment Update
+      tags:
+      - segment
+  /api/segmentation/:
+    post:
+      consumes:
+      - application/json
+      description: Add&Delete user to/from segment
+      operationId: segment-membership
+      parameters:
+      - description: Segmentation
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/segmentationService.Segmentation'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+      summary: Segmentation
+      tags:
+      - segmentation
+  /api/user/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a user and return user_id
+      operationId: create-user
+      parameters:
+      - description: username
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/segmentationService.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+      summary: User Creation
+      tags:
+      - user
+  /api/user/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user from database
+      operationId: delete-user
+      parameters:
+      - description: username
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/segmentationService.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+      summary: User Deletion
+      tags:
+      - user
+  /api/user/historyLink/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Returns link to csv file of users history
+      operationId: user-history
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: year-month
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/segmentationService.ShowHistory'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: URL to download the CSV file
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+      summary: Show User History
+      tags:
+      - user
+  /api/user/showSegments/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Show segments by user_id
+      operationId: show-segments
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/response.errorResponse'
+      summary: Show User Segments
+      tags:
+      - user
+swagger: "2.0"
