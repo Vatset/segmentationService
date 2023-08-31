@@ -74,7 +74,7 @@ func (h *Handler) deleteUser(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param id path int true "User ID"
-// @Success 200 {object} response.StatusResponse
+// @Success 200 {string} string "User Segments"
 // @Failure 400,404 {object} response.errorResponse
 // @Failure 500 {object} response.errorResponse
 // @Failure default {object} response.errorResponse
