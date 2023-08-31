@@ -34,6 +34,20 @@ func (s *UserSevice) CreateLinkToCSV(userID int, period, startDate, endDate stri
 
 	}
 	filename := "user" + strconv.Itoa(userID) + "_period" + period + "_history.csv"
+
+	folderPath := "history"
+	rootPath, err := os.Getwd()
+	if err != nil {
+		return "", errors.New("Error getting directory")
+	}
+
+	fullPath := filepath.Join(rootPath, folderPath)
+	if _, err := os.Stat(fullPath); os.IsNotExist(err) {
+		if err := os.Mkdir(fullPath, 0755); err != nil {
+			return "", errors.New("Error creating folder")
+		}
+	}
+
 	savePath := "history/"
 	filePath := filepath.Join(savePath, filename)
 
