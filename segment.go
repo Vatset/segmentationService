@@ -37,7 +37,7 @@ type ShowHistory struct {
 }
 
 func SlugValidation(segment string) error {
-	regexPattern := "^[a-zA-Z0-9-]+$"
+	regexPattern := "^[A-Za-z0-9-_]+$"
 	matched, err := regexp.MatchString(regexPattern, segment)
 	if err != nil {
 		return fmt.Errorf("Incorrect pattern")

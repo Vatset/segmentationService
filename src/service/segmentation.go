@@ -95,15 +95,20 @@ func (s *SegmentationService) TimeParser(input segmentation_service.Segmentation
 }
 
 func (s *SegmentationService) UsersForAutoSegmentation(percent int) ([]int, error) {
-	usersCountInTable, _ := s.repo.CountOfUsers()
+	usersCountInTable, users, _ := s.repo.CountOfUsers()
 	generalCountOfUsersWithSegment := int(math.Floor(float64(usersCountInTable * percent / 100)))
+
+	var indexes []int
+	for i := 0; i < len(users); i++ {
+		indexes = append(indexes, i)
+	}
+	shuffle(indexes)
+	shuffle(users)
 
 	usersWithSegment := make([]int, generalCountOfUsersWithSegment)
 	for i := 0; i < generalCountOfUsersWithSegment; i++ {
-		usersWithSegment[i] = i + 1
+		usersWithSegment[i] = users[indexes[i]]
 	}
-
-	shuffle(usersWithSegment)
 
 	return usersWithSegment, nil
 }

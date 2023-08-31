@@ -21,7 +21,7 @@ type Segment interface {
 type Segmentation interface {
 	SegmentMembership(input segmentation_service.Segmentation) error
 	SegmentChecker(input segmentation_service.Segmentation) error
-	CountOfUsers() (int, error)
+	CountOfUsers() (int, []int, error)
 	SegmentationHistoryComment(status string, segments []string, userId int) error
 }
 

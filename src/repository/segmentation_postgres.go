@@ -158,12 +158,26 @@ func (r *SegmentationRepository) SegmentationHistoryComment(status string, segme
 	}
 	return nil
 }
-func (r *SegmentationRepository) CountOfUsers() (int, error) {
-	query := fmt.Sprintf("SELECT  COUNT(*)  FROM %s", usersTable)
-	var countOfUsers int
-	err := r.db.QueryRow(query).Scan(&countOfUsers)
+func (r *SegmentationRepository) CountOfUsers() (int, []int, error) {
+	query := fmt.Sprintf("SELECT id FROM %s", usersTable)
+	rows, err := r.db.Query(query)
 	if err != nil {
-		return 0, err
+		return 0, nil, err
 	}
-	return countOfUsers, err
+	defer rows.Close()
+
+	var users []int
+	var user int
+	for rows.Next() {
+		if err := rows.Scan(&user); err != nil {
+			return 0, nil, err
+		}
+		users = append(users, user)
+	}
+
+	if err := rows.Err(); err != nil {
+		return 0, nil, err
+	}
+
+	return len(users), users, nil
 }
